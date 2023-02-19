@@ -10,7 +10,7 @@ module.exports = {
     entry: {
         'main': './main.tsx'
     },
-    
+
     output: {
         filename: '[name].bundle.js',
         path: DESTINATION
@@ -44,10 +44,6 @@ module.exports = {
             directory: path.resolve(__dirname, "src/static"),
           },
     },
-    plugins: [new HtmlWebpackPlugin(
-        {
-            template: 'index.html'
-        }
-    )],
+    plugins: [new HtmlWebpackPlugin()],
 };
 
