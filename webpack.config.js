@@ -44,6 +44,10 @@ module.exports = {
             directory: path.resolve(__dirname, "src/static"),
           },
     },
-    plugins: [new HtmlWebpackPlugin()],
+    plugins: [new HtmlWebpackPlugin(
+        {
+            template: 'index.html'
+        }
+    )],
 };
 
