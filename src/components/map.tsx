@@ -112,17 +112,14 @@ function augmentData(data: GeoJSON.FeatureCollection<GeoJSON.Geometry>): GeoJSON
 }
 
 function Legend() {
-    const item = (color: string, label: string) => {
-        return (<><div className={`inline-block bg-[${color}] w-4 h-4 mr-2`}/><span>{label}</span><br /></>)
-    }
-
+    const itemClasses = "w-4 h-4 mr-2 inline-block "
     return (
         <div className="absolute left-1 top-0 border-1 padding-10 bg-white text-xl">
-            {item("#fee08b", "Self Employed Only")}
-            {item("#66c2a5", "Full Digital Nomad Visa")}
-            {item("#c6ffc2", "Partial Support (certain territories)")}
-            {item("#5e4aa9", "Announced & Coming")}
-            {item("#ff9696", "Revoked")}
+            <div className={"bg-[#fee08b] " + itemClasses}/><span>Self Employeed only</span><br />
+            <div className={"bg-[#66c2a5] " + itemClasses}/><span>Full Digital Nomad Visa</span><br />
+            <div className={"bg-[#c6ffc2] " + itemClasses}/><span>Partial Support (certain territories)</span><br />
+            <div className={"bg-[#5e4aa9] " + itemClasses}/><span>Announced & Coming</span><br />
+            <div className={"bg-[#ff9696] " + itemClasses}/><span>Revoked</span><br />
         </div>
     )
 }
