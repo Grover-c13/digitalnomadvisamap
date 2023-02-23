@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import Map, {FillLayer, Layer, MapLayerMouseEvent, Source} from "react-map-gl";
-import {CountryData, countryData} from "./data/data";
+import {CountryData, countryData} from "../data/data";
 
 const dataLayer: FillLayer = {
     id: 'data',
@@ -9,11 +9,11 @@ const dataLayer: FillLayer = {
         'fill-color': {
             property: 'visa_level',
             stops: [
-                [0, '#fee08b'],
-                [1, '#66c2a5'],
-                [2, '#ff9696'],
-                [3, '#5e4aa9'],
-                [4, '#c6ffc2'],
+                [0, '#fee08b'], // Self employed
+                [1, '#66c2a5'], // Good
+                [2, '#ff9696'], // Revoked
+                [3, '#5e4aa9'], // Coming
+                [4, '#c6ffc2'], // Partial
             ]
         },
         'fill-opacity': 0.8
@@ -22,7 +22,7 @@ const dataLayer: FillLayer = {
 
 const COUNTRY_GEO_KEY = "ISO_A3";
 
-export const MapElement = () => {
+export const MapElement = (props: { className: string }) => {
     const [hoverInfo, setHoverInfo] = useState<{x: number, y: number, data: CountryData}>(null);
     const [allData, setAllData] = useState(null);
     useEffect(() => {
@@ -48,6 +48,7 @@ export const MapElement = () => {
     }, []);
 
     return (
+        <div className={props.className}>
             <Map
                 initialViewState={{
                     latitude: 40,
@@ -60,29 +61,32 @@ export const MapElement = () => {
                 onMouseMove={onHover}
                 onClick={onHover}
             >
-            <Source type="geojson" data={allData}>
-                <Layer {...dataLayer} />
-            </Source>
-            {hoverInfo && (
-                <div className="w-80 absolute bg-white p-2" style={{left: hoverInfo.x, top: hoverInfo.y}}>
-                    <HoverRow label="VISA Cost">{hoverInfo.data.cost}</HoverRow>
-                    <HoverRow label="Savings Needed">{hoverInfo.data.savings_needed}</HoverRow>
-                    <HoverRow label="Income Needed">{hoverInfo.data.income_per_month_needed}</HoverRow>
-                    <HoverRow label="Last Updated">{hoverInfo.data.last_updated}</HoverRow>
-                    <br />
-                    <div className={"w-25"}>{hoverInfo.data.comments}</div>
-                    <br />
-                    {hoverInfo.data.official_url && <a className={"font-medium text-blue-600 dark:text-blue-500 hover:underline"} href={hoverInfo.data.official_url} target="_blank">Official Url </a>}
-                </div>
-            )}
-        </Map>
+
+                <Source type="geojson" data={allData}>
+                    <Layer {...dataLayer} />
+                </Source>
+                {hoverInfo && (
+                    <div className="w-80 absolute bg-white p-2 sm:text-2xl" style={{left: hoverInfo.x, top: hoverInfo.y}}>
+                        <HoverRow label="VISA Cost">{hoverInfo.data.cost}</HoverRow>
+                        <HoverRow label="Savings Needed">{hoverInfo.data.savings_needed}</HoverRow>
+                        <HoverRow label="Income Needed">{hoverInfo.data.income_per_month_needed}</HoverRow>
+                        <HoverRow label="Last Updated">{hoverInfo.data.last_updated}</HoverRow>
+                        <br />
+                        <div className={"w-25"}>{hoverInfo.data.comments}</div>
+                        <br />
+                        {hoverInfo.data.official_url && <a className={"font-medium text-blue-600 dark:text-blue-500 hover:underline"} href={hoverInfo.data.official_url} target="_blank">Official Url </a>}
+                    </div>
+                )}
+            </Map>
+            <Legend />
+        </div>
     )
 }
 
 function HoverRow(props: {label: string, children: string | number | JSX.Element}) {
     return (
         <div>
-            <span className="font-bold mr-1 w-40 inline-block">{props.label}</span>
+            <span className="font-bold mr-1 w-40 inline-block text-large">{props.label}</span>
             <span>{props.children}</span>
         </div>
     )
@@ -107,4 +111,18 @@ function augmentData(data: GeoJSON.FeatureCollection<GeoJSON.Geometry>): GeoJSON
     return mapped
 }
 
-function mapToCode() {}
+function Legend() {
+    const item = (color: string, label: string) => {
+        return (<><div className={`inline-block bg-[${color}] w-4 h-4 mr-2`}/><span>{label}</span><br /></>)
+    }
+
+    return (
+        <div className="absolute left-1 top-0 border-1 padding-10 bg-white text-xl">
+            {item("#fee08b", "Self Employed Only")}
+            {item("#66c2a5", "Full Digital Nomad Visa")}
+            {item("#c6ffc2", "Partial Support (certain territories)")}
+            {item("#5e4aa9", "Announced & Coming")}
+            {item("#ff9696", "Revoked")}
+        </div>
+    )
+}
