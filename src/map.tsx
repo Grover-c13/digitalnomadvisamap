@@ -11,6 +11,9 @@ const dataLayer: FillLayer = {
             stops: [
                 [0, '#fee08b'],
                 [1, '#66c2a5'],
+                [2, '#ff9696'],
+                [3, '#5e4aa9'],
+                [4, '#c6ffc2'],
             ]
         },
         'fill-opacity': 0.8
@@ -69,7 +72,7 @@ export const MapElement = () => {
                     <br />
                     <div className={"w-25"}>{hoverInfo.data.comments}</div>
                     <br />
-                    <a className={"font-medium text-blue-600 dark:text-blue-500 hover:underline"} href={hoverInfo.data.official_url} target="_blank">Official Url </a>
+                    {hoverInfo.data.official_url && <a className={"font-medium text-blue-600 dark:text-blue-500 hover:underline"} href={hoverInfo.data.official_url} target="_blank">Official Url </a>}
                 </div>
             )}
         </Map>
@@ -90,13 +93,12 @@ function hasVisa(countryCode: string) {
 }
 
 function augmentData(data: GeoJSON.FeatureCollection<GeoJSON.Geometry>): GeoJSON.FeatureCollection<GeoJSON.Geometry> {
-    console.log(data)
     const mapped = {
         ...data,
         features: data.features.filter(f => hasVisa(f.properties["ISO_A3"])).map(f => {
             return {
                 ...f,
-                properties: {...f.properties, "visa_level": countryData[f.properties["ISO_A3"]].visa_level}
+                properties: {...f.properties, "visa_level": countryData[f.properties["ISO_A3"]].visa_support_level.valueOf()}
             }
         })
     }
@@ -104,3 +106,5 @@ function augmentData(data: GeoJSON.FeatureCollection<GeoJSON.Geometry>): GeoJSON
     console.log(mapped)
     return mapped
 }
+
+function mapToCode() {}
