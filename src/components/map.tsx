@@ -66,14 +66,12 @@ export const MapElement = (props: { className: string }) => {
                     <Layer {...dataLayer} />
                 </Source>
                 {hoverInfo && (
-                    <div className="w-80 absolute bg-white p-2 sm:text-2xl" style={{left: hoverInfo.x, top: hoverInfo.y}}>
+                    <div className="w-80 absolute bg-white p-2 md:text-2xl lg:text-base" style={{left: hoverInfo.x, top: hoverInfo.y}}>
                         <HoverRow label="VISA Cost">{hoverInfo.data.cost}</HoverRow>
                         <HoverRow label="Savings Needed">{hoverInfo.data.savings_needed}</HoverRow>
-                        <HoverRow label="Income Needed">{hoverInfo.data.income_per_month_needed}</HoverRow>
+                        <HoverRow label="Income Req. (per month)">{hoverInfo.data.income_per_month_needed}</HoverRow>
                         <HoverRow label="Last Updated">{hoverInfo.data.last_updated}</HoverRow>
-                        <br />
-                        <div className={"w-25"}>{hoverInfo.data.comments}</div>
-                        <br />
+                        <div className={"w-25 mt-5 mb-5"}>{hoverInfo.data.comments}</div>
                         {hoverInfo.data.official_url && <a className={"font-medium text-blue-600 dark:text-blue-500 hover:underline"} href={hoverInfo.data.official_url} target="_blank">Official Url </a>}
                     </div>
                 )}
@@ -85,8 +83,9 @@ export const MapElement = (props: { className: string }) => {
 
 function HoverRow(props: {label: string, children: string | number | JSX.Element}) {
     return (
+        props.children &&
         <div>
-            <span className="font-bold mr-1 w-40 inline-block text-large">{props.label}</span>
+            <span className="font-bold mr-1 w-60 inline-block text-large">{props.label}</span>
             <span>{props.children}</span>
         </div>
     )

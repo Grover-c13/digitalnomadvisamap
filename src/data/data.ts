@@ -246,7 +246,7 @@ export const countryData: { [c: string]: CountryData } = {
         savings_needed: "",
         income_per_month_needed: "",
         last_updated: "",
-        comments: "Visa announced March 28, 2022. It has benn approved and signed into law, its awaiting implementation.",
+        comments: "Visa announced March 28, 2022. It has been approved and signed into law, its awaiting implementation.",
         official_url: "https://www.schengenvisainfo.com/digital-nomad-visa/italy/"
     },
 
